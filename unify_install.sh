@@ -46,7 +46,7 @@ mkdir ~/Downloads/unify-install/unpack
 unzip -o ~/Downloads/unify-install/unify_"$UNIFY_VERSION"_armhf.zip -d ~/Downloads/unify-install/unpack
 
 #Install all packages
-dpkg -i ~/Downloads/unify-install/unpack/unify_"$UNIFY_VERSION"_armhf/*
+dpkg -i ~/Downloads/unify-install/unpack/unify_"$UNIFY_VERSION"_armhf/*.deb
 
 #Install all missing depencies - this will kick off UIC config interfaces.
 sudo apt-get install -f
