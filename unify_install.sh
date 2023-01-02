@@ -6,8 +6,9 @@ ERR_NONE=0
 ERR_NCP_NOT_FOUND=2
 ERR_UNKNOWN=3
 
-# Change to point to desired Unify SDK version:
+# Change to point to desired Unify SDK / Matter versions:
 UNIFY_VERSION="1.2.1"
+MATTER_VERSION="1.0.2-1.0"
 
 # Quick device var to make sure at least one NCP is present:
 # - Z-Wave USLR controller on Thunderboard on my test, hence ttyACM0
@@ -39,18 +40,25 @@ apt install -y libboost-program-options1.67.0
 
 # Retrieve and install Unify SDK
 logger -s -t UNIFY_INSTALLATION "Retrieving Unify installation: $UNIFY_VERSION"
-
 mkdir -p ~/Downloads/unify-install
 wget https://github.com/SiliconLabs/UnifySDK/releases/download/ver_"$UNIFY_VERSION"/unify_"$UNIFY_VERSION"_armhf.zip -P ~/Downloads/unify-install
 mkdir ~/Downloads/unify-install/unpack
 unzip -o ~/Downloads/unify-install/unify_"$UNIFY_VERSION"_armhf.zip -d ~/Downloads/unify-install/unpack
 
-#Install all packages
+# Install all packages
 dpkg -i ~/Downloads/unify-install/unpack/unify_"$UNIFY_VERSION"_armhf/*.deb
 
-#Install all missing depencies - this will kick off UIC config interfaces.
-sudo apt-get install -f
+# Install all missing depencies - this will kick off UIC config interfaces.
+sudo apt install -yf
 
+# Retrieve matter bridge
+logger -s -t UNIFY_INSTALLATION "Retrieving Matter installation: $MATTER_VERSION"
+mkdir -p ~/Downloads/matter-install
+wget https://github.com/SiliconLabs/matter/releases/download/v"$MATTER_VERSION"/unify_matter_bridge_"$MATTER_VERSION".zip -P ~/Downloads/matter-install
+mkdir ~/Downloads/matter-install/unpack
+unzip -o ~/Downloads/matter-install/unify_matter_bridge_"$MATTER_VERSION".zip -d ~/Downloads/matter-install/unpack
+
+# Finish script with some notes.
 logger -s -t UNIFY_INSTALLATION "Unify installation attempt complete."
 logger -s -t UNIFY_INSTALLATION "From this machine, connect to sample UI via: 127.0.0.1:3080/nodes"
 logger -s -t UNIFY_INSTALLATION "Manually REBOOT machine or restart all uic- services!"
